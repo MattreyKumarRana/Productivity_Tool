@@ -95,10 +95,9 @@ const MeetingRoomsSection = () => {
   if (error) return <div className="text-red-500">Error: {error.message}</div>
 
   return (
-    <div className="mt-12 rounded-lg border border-gray-300 bg-gray-50 p-8">
-      <h2 className="mb-8 text-xl font-medium text-gray-900">Meeting Rooms</h2>
-
-      <form onSubmit={handleSubmit} className="mb-8 space-y-6">
+    <div className="rounded-lg border-2 bg-white p-6 shadow-lg shadow-black">
+      <h2 className="mb-4 text-xl font-bold">Meeting Rooms</h2>
+      <form onSubmit={handleSubmit} className="mb-4 flex flex-col gap-2">
         <input
           type="text"
           placeholder="Room name"
@@ -118,14 +117,14 @@ const MeetingRoomsSection = () => {
         <div className="flex justify-end gap-4">
           <button
             type="submit"
-            className="rounded-md bg-orange-500 px-5 py-2 text-white transition hover:bg-orange-600"
+            className="rounded bg-indigo-600 px-4 py-2 text-white transition hover:bg-indigo-700"
           >
             {editingRoom ? 'Update Room' : 'Add Room'}
           </button>
           {editingRoom && (
             <button
               type="button"
-              className="rounded-md bg-gray-300 px-5 py-2 text-gray-800 transition hover:bg-gray-400"
+              className="rounded bg-gray-300 px-4 py-2 transition hover:bg-gray-400"
               onClick={handleCancelEdit}
             >
               Cancel
@@ -136,29 +135,26 @@ const MeetingRoomsSection = () => {
 
       <table className="w-full rounded-md border border-gray-300">
         <thead>
-          <tr className="bg-orange-100">
-            <th className="px-4 py-3 text-left text-gray-900">Name</th>
-            <th className="px-4 py-3 text-left text-gray-900">Description</th>
-            <th className="px-4 py-3"></th>
+          <tr>
+            <th className="border-b px-4 py-2 text-left">Name</th>
+            <th className="border-b px-4 py-2 text-left">Description</th>
+            <th className="border-b px-4 py-2"></th>
           </tr>
         </thead>
         <tbody>
           {data.meetingRooms.map((room) => (
-            <tr
-              key={room.id}
-              className="border-t border-gray-300 hover:bg-orange-50"
-            >
-              <td className="px-4 py-3 text-gray-800">{room.name}</td>
-              <td className="px-4 py-3 text-gray-800">{room.description}</td>
-              <td className="flex justify-end gap-4 px-4 py-3">
+            <tr key={room.id} className="hover:bg-gray-50">
+              <td className="border-b px-4 py-2">{room.name}</td>
+              <td className="border-b px-4 py-2">{room.description}</td>
+              <td className="flex gap-2 border-b px-4 py-2">
                 <button
-                  className="rounded-md border border-orange-600 px-4 py-2 text-orange-600 transition hover:bg-orange-600 hover:text-white"
+                  className="rounded-md border-2 bg-blue-600 px-4 text-white transition hover:bg-blue-800"
                   onClick={() => handleEdit(room)}
                 >
                   Edit
                 </button>
                 <button
-                  className="rounded-md border border-red-600 px-4 py-2 text-red-600 transition hover:bg-red-600 hover:text-white"
+                  className="rounded-md border-2 bg-red-500 px-2 text-white transition hover:bg-red-700"
                   onClick={() =>
                     deleteMeetingRoom({ variables: { id: room.id } })
                   }
