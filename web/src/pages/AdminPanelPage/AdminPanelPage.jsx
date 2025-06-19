@@ -44,7 +44,10 @@ const DELETE_USER_MUTATION = gql`
 `
 
 const UPDATE_EXCEPTION_REQUEST = gql`
-  mutation UpdateExceptionRequest($id: Int!, $input: UpdateExceptionRequestInput!) {
+  mutation UpdateExceptionRequest(
+    $id: Int!
+    $input: UpdateExceptionRequestInput!
+  ) {
     updateExceptionRequest(id: $id, input: $input) {
       id
       status
@@ -79,10 +82,12 @@ const AdminPanelPage = () => {
     fetchPolicy: 'network-only',
   })
 
-  const { data: allUsersData, loading: allUsersLoading, error: allUsersError, refetch: refetchUsers } = useQuery(
-    ALL_USERS_ATTENDANCE_QUERY,
-    { fetchPolicy: 'network-only' }
-  )
+  const {
+    data: allUsersData,
+    loading: allUsersLoading,
+    error: allUsersError,
+    refetch: refetchUsers,
+  } = useQuery(ALL_USERS_ATTENDANCE_QUERY, { fetchPolicy: 'network-only' })
 
   // Add a refetch state for meeting rooms
   const [meetingRoomsKey, setMeetingRoomsKey] = useState(0)
@@ -106,17 +111,27 @@ const AdminPanelPage = () => {
   })
 
   // Office hours state
-  const { data: officeHoursData, loading: officeHoursLoading, error: officeHoursError, refetch: refetchOfficeHours } = useQuery(OFFICE_HOURS_QUERY)
+  const {
+    data: officeHoursData,
+    loading: officeHoursLoading,
+    error: officeHoursError,
+    refetch: refetchOfficeHours,
+  } = useQuery(OFFICE_HOURS_QUERY)
   const [updateOfficeHours] = useMutation(UPDATE_OFFICE_HOURS, {
     onCompleted: () => refetchOfficeHours(),
   })
 
-  const officeHours = officeHoursData?.officeHours || { startTime: '09:00', endTime: '18:00' }
+  const officeHours = officeHoursData?.officeHours || {
+    startTime: '09:00',
+    endTime: '18:00',
+  }
   const [startTime, setStartTime] = useState(officeHours.startTime)
   const [endTime, setEndTime] = useState(officeHours.endTime)
 
   const handleSave = () => {
-    updateOfficeHours({ variables: { id: officeHours.id, input: { startTime, endTime } } })
+    updateOfficeHours({
+      variables: { id: officeHours.id, input: { startTime, endTime } },
+    })
   }
 
   // Pagination states
@@ -179,25 +194,30 @@ const AdminPanelPage = () => {
 
   return (
     <>
-      <Metadata title="Admin Panel" description="Manage users and exception requests" />
+      <Metadata
+        title="Admin Panel"
+        description="Manage users and exception requests"
+      />
 
       {/* Delete User Dialog */}
       {showDeleteDialog && userToDelete && (
-        <div className="fixed inset-0 flex items-center justify-center  bg-black bg-opacity-40 z-50">
-          <div className="bg-white rounded-lg shadow-lg p-8 max-w-sm w-full">
-            <h3 className="text-lg font-bold mb-4">Delete User</h3>
+        <div className="fixed inset-0 z-50 flex items-center  justify-center bg-black bg-opacity-40">
+          <div className="w-full max-w-sm rounded-lg bg-white p-8 shadow-lg">
+            <h3 className="mb-4 text-lg font-bold">Delete User</h3>
             <p className="mb-6">
-              Are you sure you want to delete <span className="font-semibold">{userToDelete.name}</span>? This action cannot be undone.
+              Are you sure you want to delete{' '}
+              <span className="font-semibold">{userToDelete.name}</span>? This
+              action cannot be undone.
             </p>
             <div className="flex justify-end gap-3">
               <button
-                className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
+                className="rounded bg-gray-200 px-4 py-2 hover:bg-gray-300"
                 onClick={() => setShowDeleteDialog(false)}
               >
                 Cancel
               </button>
               <button
-                className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
+                className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
                 onClick={() => {
                   deleteUser({ variables: { id: userToDelete.id } })
                 }}
@@ -209,12 +229,16 @@ const AdminPanelPage = () => {
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto mt-8 px-4">
-        <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">Admin Panel</h1>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="mx-auto mt-8 max-w-7xl px-4">
+        <h1 className="mb-8 text-center text-4xl font-bold text-gray-800">
+          Admin Panel
+        </h1>
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
           {/* Manage Users Section */}
-          <div className="bg-gray-50 border-2 shadow-black shadow-lg rounded-lg  p-6">
-            <h2 className="text-2xl font-semibold mb-6 text-gray-800">Manage Users</h2>
+          <div className="rounded-lg border-2 bg-gray-50 p-6 shadow-lg  shadow-black">
+            <h2 className="mb-6 text-2xl font-semibold text-gray-800">
+              Manage Users
+            </h2>
             {allUsersLoading ? (
               <div className="text-gray-500">Loading...</div>
             ) : allUsersError ? (
@@ -227,11 +251,13 @@ const AdminPanelPage = () => {
                   {paginatedUsers.map((user) => (
                     <div
                       key={user.id}
-                      className="flex items-center justify-between bg-white rounded-lg shadow p-4 border border-gray-200"
+                      className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow"
                     >
-                      <span className="text-gray-800 font-medium">{user.name}</span>
+                      <span className="font-medium text-gray-800">
+                        {user.name}
+                      </span>
                       <button
-                        className="px-3 py-1 bg-red-500 text-white rounded text-xs hover:bg-red-600 transition"
+                        className="rounded bg-red-500 px-3 py-1 text-xs text-white transition hover:bg-red-600"
                         onClick={() => {
                           setUserToDelete(user)
                           setShowDeleteDialog(true)
@@ -243,20 +269,24 @@ const AdminPanelPage = () => {
                   ))}
                 </div>
                 {/* Pagination Controls */}
-                <div className="flex justify-between items-center mt-6">
+                <div className="mt-6 flex items-center justify-between">
                   <button
-                    className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition"
+                    className="rounded bg-gray-200 px-4 py-2 transition hover:bg-gray-300"
                     disabled={userPage === 1}
                     onClick={() => setUserPage((prev) => prev - 1)}
                   >
                     Previous
                   </button>
                   <span className="text-sm text-gray-600">
-                    Page {userPage} of {Math.ceil(allUsersData?.users?.length / itemsPerPage)}
+                    Page {userPage} of{' '}
+                    {Math.ceil(allUsersData?.users?.length / itemsPerPage)}
                   </span>
                   <button
-                    className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition"
-                    disabled={userPage === Math.ceil(allUsersData?.users?.length / itemsPerPage)}
+                    className="rounded bg-gray-200 px-4 py-2 transition hover:bg-gray-300"
+                    disabled={
+                      userPage ===
+                      Math.ceil(allUsersData?.users?.length / itemsPerPage)
+                    }
                     onClick={() => setUserPage((prev) => prev + 1)}
                   >
                     Next
@@ -267,8 +297,10 @@ const AdminPanelPage = () => {
           </div>
 
           {/* Exception Requests Section */}
-          <div className="bg-gray-50 rounded-lg border-2 shadow-black shadow-lg  p-6">
-            <h2 className="text-2xl font-semibold mb-6 text-gray-800">Pending Exception Requests</h2>
+          <div className="rounded-lg border-2 bg-gray-50 p-6 shadow-lg  shadow-black">
+            <h2 className="mb-6 text-2xl font-semibold text-gray-800">
+              Pending Exception Requests
+            </h2>
             {loading ? (
               <div className="text-gray-500">Loading...</div>
             ) : error ? (
@@ -285,30 +317,34 @@ const AdminPanelPage = () => {
                         typeColors[form.type] || typeColors['Other']
                       }`}
                     >
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-gray-800 font-medium">{form.user?.name || form.userId}</span>
+                      <div className="mb-2 flex items-center justify-between">
+                        <span className="font-medium text-gray-800">
+                          {form.user?.name || form.userId}
+                        </span>
                         <span
-                          className={`px-2 py-1 rounded text-xs ${
+                          className={`rounded px-2 py-1 text-xs ${
                             form.status === 'Pending'
                               ? 'bg-yellow-100 text-yellow-700'
                               : form.status === 'Approved'
-                              ? 'bg-green-100 text-green-700'
-                              : 'bg-red-100 text-red-700'
+                                ? 'bg-green-100 text-green-700'
+                                : 'bg-red-100 text-red-700'
                           }`}
                         >
                           {form.status}
                         </span>
                       </div>
-                      <div className="flex items-center gap-1 text-sm italic text-gray-500 mb-1">
+                      <div className="mb-1 flex items-center gap-1 text-sm italic text-gray-500">
                         <span
                           className={`h-2 w-2 rounded-full ${
-                            typeColors[form.type]?.split(' ')[0].replace('border', 'bg') || 'bg-gray-300'
+                            typeColors[form.type]
+                              ?.split(' ')[0]
+                              .replace('border', 'bg') || 'bg-gray-300'
                           }`}
                         ></span>
                         {form.type}
                       </div>
                       {/* Show the date */}
-                      <div className="text-xs text-gray-500 mb-1">
+                      <div className="mb-1 text-xs text-gray-500">
                         {form.date ? (
                           <>
                             Date:{' '}
@@ -322,15 +358,15 @@ const AdminPanelPage = () => {
                         ) : null}
                       </div>
                       <p className="text-sm text-gray-600">{form.reason}</p>
-                      <div className="flex justify-end gap-2 mt-4">
+                      <div className="mt-4 flex justify-end gap-2">
                         <button
-                          className="px-3 py-1 bg-green-500 text-white rounded text-xs hover:bg-green-600 transition"
+                          className="rounded bg-green-500 px-3 py-1 text-xs text-white transition hover:bg-green-600"
                           onClick={() => handleAction(form.id, 'Approved')}
                         >
                           Approve
                         </button>
                         <button
-                          className="px-3 py-1 bg-red-500 text-white rounded text-xs hover:bg-red-600 transition"
+                          className="rounded bg-red-500 px-3 py-1 text-xs text-white transition hover:bg-red-600"
                           onClick={() => handleAction(form.id, 'Rejected')}
                         >
                           Reject
@@ -340,20 +376,24 @@ const AdminPanelPage = () => {
                   ))}
                 </div>
                 {/* Pagination Controls */}
-                <div className="flex justify-between items-center mt-6">
+                <div className="mt-6 flex items-center justify-between">
                   <button
-                    className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition"
+                    className="rounded bg-gray-200 px-4 py-2 transition hover:bg-gray-300"
                     disabled={exceptionPage === 1}
                     onClick={() => setExceptionPage((prev) => prev - 1)}
                   >
                     Previous
                   </button>
                   <span className="text-sm text-gray-600">
-                    Page {exceptionPage} of {Math.ceil(pendingExceptions.length / itemsPerPage)}
+                    Page {exceptionPage} of{' '}
+                    {Math.ceil(pendingExceptions.length / itemsPerPage)}
                   </span>
                   <button
-                    className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition"
-                    disabled={exceptionPage === Math.ceil(pendingExceptions.length / itemsPerPage)}
+                    className="rounded bg-gray-200 px-4 py-2 transition hover:bg-gray-300"
+                    disabled={
+                      exceptionPage ===
+                      Math.ceil(pendingExceptions.length / itemsPerPage)
+                    }
                     onClick={() => setExceptionPage((prev) => prev + 1)}
                   >
                     Next
@@ -365,38 +405,52 @@ const AdminPanelPage = () => {
         </div>
 
         {/* Office Hours Section */}
-        <div className="mt-8 bg-gray-50 rounded-lg border-2 shadow-black shadow-lg p-6">
-          <h2 className="text-2xl font-semibold mb-6 text-gray-800">Office Hours</h2>
+        <div className="mt-8 rounded-lg border-2 bg-gray-50 p-6 shadow-lg shadow-black">
+          <h2 className="mb-6 text-2xl font-semibold text-gray-800">
+            Office Hours
+          </h2>
           {officeHoursLoading ? (
             <div className="text-gray-500">Loading...</div>
           ) : officeHoursError ? (
-            <div className="text-red-500">Error: {officeHoursError.message}</div>
+            <div className="text-red-500">
+              Error: {officeHoursError.message}
+            </div>
           ) : (
-            <form onSubmit={e => { e.preventDefault(); handleSave() }} className="space-y-4">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault()
+                handleSave()
+              }}
+              className="space-y-4"
+            >
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Start Time</label>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">
+                    Start Time
+                  </label>
                   <input
                     type="time"
                     value={startTime}
-                    onChange={e => setStartTime(e.target.value)}
-                    className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    onChange={(e) => setStartTime(e.target.value)}
+                    className="w-full rounded-md border p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">End Time</label>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">
+                    End Time
+                  </label>
                   <input
                     type="time"
                     value={endTime}
-                    onChange={e => setEndTime(e.target.value)}
-                    className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    onChange={(e) => setEndTime(e.target.value)}
+                    className="w-full rounded-md border p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
               <div className="flex justify-end">
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+                  className="rounded-md bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700"
                 >
                   Save Office Hours
                 </button>
@@ -407,7 +461,10 @@ const AdminPanelPage = () => {
 
         {/* Move MeetingRoomsSection outside the conditional and pass a key to force refetch */}
         <div className="mt-8">
-          <MeetingRoomsSection key={meetingRoomsKey} onChanged={handleMeetingRoomsChanged} />
+          <MeetingRoomsSection
+            key={meetingRoomsKey}
+            onChanged={handleMeetingRoomsChanged}
+          />
         </div>
       </div>
     </>

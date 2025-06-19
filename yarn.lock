@@ -14698,6 +14698,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"papaparse@npm:^5.5.3":
+  version: 5.5.3
+  resolution: "papaparse@npm:5.5.3"
+  checksum: 10c0/623aae6a35703308fd5a39d616fb3837231ebc70697346355ea508154d3f24df75b6554b736afc1924192205518a5db14e75f5e1cf35d154326050a37cdd9447
+  languageName: node
+  linkType: hard
+
 "param-case@npm:^3.0.4":
   version: 3.0.4
   resolution: "param-case@npm:3.0.4"
@@ -16406,6 +16413,7 @@ __metadata:
     "@redwoodjs/auth-dbauth-setup": "npm:8.6.1"
     "@redwoodjs/core": "npm:8.6.1"
     "@redwoodjs/project-config": "npm:8.6.1"
+    papaparse: "npm:^5.5.3"
     prettier-plugin-tailwindcss: "npm:^0.5.12"
     react-calendar: "npm:^6.0.0"
     react-icons: "npm:^5.5.0"

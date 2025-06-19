@@ -83,7 +83,9 @@ const MeetingRoomsSection = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (editingRoom) {
-      updateMeetingRoom({ variables: { id: editingRoom.id, input: { name, description } } })
+      updateMeetingRoom({
+        variables: { id: editingRoom.id, input: { name, description } },
+      })
     } else {
       createMeetingRoom({ variables: { input: { name, description } } })
     }
@@ -93,35 +95,37 @@ const MeetingRoomsSection = () => {
   if (error) return <div className="text-red-500">Error: {error.message}</div>
 
   return (
-    <div className="bg-white rounded-lg border-2 shadow-black shadow-lg p-6">
-      <h2 className="text-xl font-bold mb-4">Meeting Rooms</h2>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-2 mb-4">
+    <div className="mt-12 rounded-lg border border-gray-300 bg-gray-50 p-8">
+      <h2 className="mb-8 text-xl font-medium text-gray-900">Meeting Rooms</h2>
+
+      <form onSubmit={handleSubmit} className="mb-8 space-y-6">
         <input
           type="text"
           placeholder="Room name"
           value={name}
-          onChange={e => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
           required
-          className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          className="w-full rounded-md border border-gray-300 bg-white p-2 focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
         />
         <input
           type="text"
           placeholder="Description (optional)"
           value={description}
-          onChange={e => setDescription(e.target.value)}
-          className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          onChange={(e) => setDescription(e.target.value)}
+          className="w-full rounded-md border border-gray-300 bg-white p-2 focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
         />
-        <div className="flex gap-2">
+
+        <div className="flex justify-end gap-4">
           <button
             type="submit"
-            className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition"
+            className="rounded-md bg-orange-500 px-5 py-2 text-white transition hover:bg-orange-600"
           >
             {editingRoom ? 'Update Room' : 'Add Room'}
           </button>
           {editingRoom && (
             <button
               type="button"
-              className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400 transition"
+              className="rounded-md bg-gray-300 px-5 py-2 text-gray-800 transition hover:bg-gray-400"
               onClick={handleCancelEdit}
             >
               Cancel
@@ -129,29 +133,35 @@ const MeetingRoomsSection = () => {
           )}
         </div>
       </form>
-      <table className="min-w-full bg-white border rounded shadow">
+
+      <table className="w-full rounded-md border border-gray-300">
         <thead>
-          <tr>
-            <th className="py-2 px-4 border-b text-left">Name</th>
-            <th className="py-2 px-4 border-b text-left">Description</th>
-            <th className="py-2 px-4 border-b"></th>
+          <tr className="bg-orange-100">
+            <th className="px-4 py-3 text-left text-gray-900">Name</th>
+            <th className="px-4 py-3 text-left text-gray-900">Description</th>
+            <th className="px-4 py-3"></th>
           </tr>
         </thead>
         <tbody>
-          {data.meetingRooms.map(room => (
-            <tr key={room.id} className="hover:bg-gray-50">
-              <td className="py-2 px-4 border-b">{room.name}</td>
-              <td className="py-2 px-4 border-b">{room.description}</td>
-              <td className="py-2 px-4 border-b flex gap-2">
+          {data.meetingRooms.map((room) => (
+            <tr
+              key={room.id}
+              className="border-t border-gray-300 hover:bg-orange-50"
+            >
+              <td className="px-4 py-3 text-gray-800">{room.name}</td>
+              <td className="px-4 py-3 text-gray-800">{room.description}</td>
+              <td className="flex justify-end gap-4 px-4 py-3">
                 <button
-                  className="text-white border-2 px-4 rounded-md bg-blue-600 hover:bg-blue-800 transition"
+                  className="rounded-md border border-orange-600 px-4 py-2 text-orange-600 transition hover:bg-orange-600 hover:text-white"
                   onClick={() => handleEdit(room)}
                 >
                   Edit
                 </button>
                 <button
-                  className="text-white border-2 rounded-md bg-red-500 px-2 hover:bg-red-700 transition"
-                  onClick={() => deleteMeetingRoom({ variables: { id: room.id } })}
+                  className="rounded-md border border-red-600 px-4 py-2 text-red-600 transition hover:bg-red-600 hover:text-white"
+                  onClick={() =>
+                    deleteMeetingRoom({ variables: { id: room.id } })
+                  }
                 >
                   Delete
                 </button>
